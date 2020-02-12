@@ -5,12 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Timer;
 
-public class Client {
+public class ChatClient {
     Socket server;
     boolean connected = false;
-    public Client(String address, int port){
+    public ChatClient(String address, int port){
         // How many time to reattempt connection
         int attempts = 10;
         // Delay in seconds.
@@ -60,7 +59,37 @@ public class Client {
         System.out.println(msg);
     }
     public static void main(String[] args) {
-        Client client = new Client("localhost", 14001);
+        int port = 14001;
+        String address = "localhost";
+        for (int i = 0; i < args.length; i++) {
+            switch (args[i]){
+                case "-ccp":
+                    try{
+                        port = Integer.parseInt(args[i+1]);
+                        i++;
+                    } catch (IndexOutOfBoundsException e){
+                        System.err.println("Provide a port.");
+                        System.exit(1);
+                    } catch (NumberFormatException e) {
+                        System.err.println("Invalid port number.");
+                        System.exit(1);
+                    }
+                    break;
+                case "-cca":
+                    try{
+                        address = args[i+1];
+                        i++;
+                    } catch (IndexOutOfBoundsException e){
+                        System.err.println("Provide an address.");
+                    }
+                    break;
+                default:
+                    System.err.println("Unknown Argument: "+args[i]);
+                    System.exit(1);
+            }
+        }
+
+        ChatClient client = new ChatClient(address, port);
         if (client.isConnected()){
             client.start();
         }
