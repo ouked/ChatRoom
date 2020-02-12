@@ -1,5 +1,6 @@
 package com.company;
 
+import java.io.Console;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketException;
@@ -65,7 +66,30 @@ public class ChatServer {
     }
 
     public static void main(String[] args) {
-        new ChatServer(14001).start();
+        int port = 14001;
+
+        for (int i = 0; i < args.length; i++) {
+            switch (args[i]){
+                case "-csp":
+                    try{
+                        port = Integer.parseInt(args[i+1]);
+                        i++;
+                    } catch (IndexOutOfBoundsException e){
+                        System.err.println("Provide a port.");
+                        System.exit(1);
+                    } catch (NumberFormatException e) {
+                        System.err.println("Invalid port number.");
+                        System.exit(1);
+                    }
+                    break;
+                default:
+                    System.err.println("Unknown Argument: "+args[i]);
+                    System.exit(1);
+            }
+        }
+
+        new ChatServer(port).start();
+
     }
 
     public static String getName(){
