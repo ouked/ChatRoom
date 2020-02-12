@@ -15,7 +15,14 @@ public class ClientListener extends Thread {
     public void run(){
         try {
             while (true) {
-                this.client.display(this.serverIn.readLine());
+                String received = this.serverIn.readLine();
+                if (received == null) {
+                    this.client.display("Connection lost.");
+                    this.client.quit();
+                    break;
+                } else {
+                    this.client.display(received);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,26 +1,29 @@
 package com.company;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.List;
 
-public class Server {
+public class ChatServer {
     private final static String name = "Big Zac";
     private final static String version = "dev";
     private ArrayList<ServerThread> threads = new ArrayList<ServerThread>();
+    private boolean running;
     public void start() {
+        // Requirement S.1
+        // Requirement S.2
         try {
-            while (true) {
-                threads.add(new ServerThread(this, in.accept()));
+            System.out.println(running);
+            threads.add(new ServerThread(this, in.accept()));
+        } catch (IOException e) {
+            if (!this.running) {
+                try {
+                    in.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
-
-
-        } catch (IOException e)  {
             e.printStackTrace();
         } finally {
             try {
@@ -33,7 +36,8 @@ public class Server {
 
     private ServerSocket in;
 
-    public Server(int port) {
+    public ChatServer(int port) {
+        this.running = true;
         // Setup Socket on port
         try{
             in = new ServerSocket(port);
@@ -61,7 +65,7 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        new Server(25565).start();
+        new ChatServer(14001).start();
     }
 
     public static String getName(){
@@ -75,10 +79,24 @@ public class Server {
     public ServerThread getThreadByUsername(String username){
         for (ServerThread t :
                 this.threads) {
-            if (t.getUsername() == username) {
+            if (username.equals(t.getUsername())) {
                 return t;
             }
         }
         return null;
+    }
+
+    public void quit(){
+        System.out.println("Shutting down...");
+        for (ServerThread thread :
+                threads) {
+            thread.quit();
+        }
+        this.running = false;
+        try {
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
