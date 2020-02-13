@@ -51,6 +51,7 @@ public class ServerThread extends Thread {
                 }
                 if (userInput.startsWith("/")) {
                     this.command(userInput);
+                // Requirement S.6
                 } else if (userInput.equals("EXIT")){
                     this.command("/exit");
                 } else {

@@ -66,8 +66,10 @@ public class ChatServer {
     }
 
     public static void main(String[] args) {
+        // Requirement S.7
         int port = 14001;
 
+        // Requirement S.9
         for (int i = 0; i < args.length; i++) {
             switch (args[i]){
                 case "-csp":

@@ -7,8 +7,12 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ChatClient {
-    Socket server;
-    boolean connected = false;
+    protected Socket server;
+    private boolean connected = false;
+    private BufferedReader userInput;
+    private PrintWriter serverOut;
+    private ClientListener cl;
+
     public ChatClient(String address, int port){
         // How many time to reattempt connection
         int attempts = 10;
@@ -16,6 +20,7 @@ public class ChatClient {
         final int delay = 2;
         while (attempts != 0) {
             try {
+                // Requirement C.5
                 server = new Socket(address, port);
                 System.out.println("Connected to server: " + address);
                 this.connected = true;
@@ -38,16 +43,19 @@ public class ChatClient {
     public void start(){
         try {
             // From user
-            BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
+            userInput = new BufferedReader(new InputStreamReader(System.in));
 
             // To server
-            PrintWriter serverOut = new PrintWriter(server.getOutputStream(), true);
+            serverOut = new PrintWriter(server.getOutputStream(), true);
 
-            ClientListener cl = new ClientListener(this, new BufferedReader(new InputStreamReader(server.getInputStream())));
+            cl = new ClientListener(this, new BufferedReader(new InputStreamReader(server.getInputStream())));
 
             while (true) {
+                // Requirement C.1
                 String userIn = userInput.readLine();
 
+                // Requirement C.2
+                // Requirement C.6
                 serverOut.println(userIn);
             }
         } catch (IOException e) {
@@ -59,8 +67,14 @@ public class ChatClient {
         System.out.println(msg);
     }
     public static void main(String[] args) {
+        // Requirement C.9
         int port = 14001;
+        // Requirement C.8
         String address = "localhost";
+
+        // Requirement C.10
+        // Requirement C.11
+        // Requirement C.12
         for (int i = 0; i < args.length; i++) {
             switch (args[i]){
                 case "-ccp":

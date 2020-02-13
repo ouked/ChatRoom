@@ -15,6 +15,7 @@ public class ClientListener extends Thread {
     public void run(){
         try {
             while (true) {
+                // Requirement C.4
                 String received = this.serverIn.readLine();
                 if (received == null) {
                     this.client.display("Connection lost.");
