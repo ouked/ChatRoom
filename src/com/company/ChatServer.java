@@ -15,8 +15,9 @@ public class ChatServer {
         // Requirement S.1
         // Requirement S.2
         try {
-            System.out.println(running);
-            threads.add(new ServerThread(this, in.accept()));
+            while (true) {
+                threads.add(new ServerThread(this, in.accept()));
+            }
         } catch (IOException e) {
             if (!this.running) {
                 try {
