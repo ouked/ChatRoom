@@ -5,8 +5,8 @@ import java.io.IOException;
 
 public class ClientListener extends Thread {
     BufferedReader serverIn;
-    ChatClient client;
-    public ClientListener(ChatClient c, BufferedReader br){
+    GeneralClient client;
+    public ClientListener(GeneralClient c, BufferedReader br){
         this.client = c;
         this.serverIn = br;
         this.start();
